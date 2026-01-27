@@ -13,7 +13,11 @@ data object SendMoney : NavKey
 data object TransactionList : NavKey
 
 fun EntryProviderScope<NavKey>.transactionEntry(backStack: NavBackStack<NavKey>) {
-    entry<TransactionList>{
-        TransactionListScreen()
+    entry<TransactionList> {
+        TransactionListScreen(
+            onBackClick = {
+                backStack.removeLastOrNull()
+            }
+        )
     }
 }
