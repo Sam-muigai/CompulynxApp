@@ -14,7 +14,8 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 
 interface CompulynxPreferences {
-
+    suspend fun saveName(name: String)
+    fun getName(): Flow<String>
     suspend fun saveEmail(email: String)
     fun getEmail(): Flow<String>
 
@@ -29,6 +30,18 @@ interface CompulynxPreferences {
 class CompulynxPreferencesImpl(
     private val context: Context
 ) : CompulynxPreferences {
+    override suspend fun saveName(name: String) {
+        context.dataStore.edit { preferences ->
+            preferences[USER_NAME] = name
+        }
+    }
+
+    override fun getName(): Flow<String> {
+        return context.dataStore.data.map { preferences ->
+            preferences[USER_NAME] ?: ""
+        }
+    }
+
     override suspend fun saveEmail(email: String) {
         context.dataStore.edit { preferences ->
             preferences[EMAIL] = email
@@ -67,6 +80,7 @@ class CompulynxPreferencesImpl(
 
     companion object {
         val EMAIL = stringPreferencesKey("email")
+        val USER_NAME = stringPreferencesKey("user_name")
         val ACCOUNT_NUMBER = stringPreferencesKey("account_number")
         val CUSTOMER_ID = stringPreferencesKey("customer_id")
     }

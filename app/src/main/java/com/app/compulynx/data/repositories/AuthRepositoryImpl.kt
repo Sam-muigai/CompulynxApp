@@ -24,6 +24,9 @@ class AuthRepositoryImpl @Inject constructor(
                 responseDto?.accountDto?.let { account ->
                     compulynxPreferences.saveAccountNumber(account.accountNo ?: "")
                 }
+                responseDto?.customerName?.let {
+                    compulynxPreferences.saveName(responseDto.customerName)
+                }
                 "Login successful"
             }
     }

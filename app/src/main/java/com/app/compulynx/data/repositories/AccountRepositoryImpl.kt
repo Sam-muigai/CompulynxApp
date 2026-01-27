@@ -7,6 +7,7 @@ import com.app.compulynx.data.helpers.mapResult
 import com.app.compulynx.data.mappers.toDomain
 import com.app.compulynx.domain.models.Account
 import com.app.compulynx.domain.repositories.AccountRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
@@ -21,5 +22,9 @@ class AccountRepositoryImpl @Inject constructor(
             .mapResult { responseDto ->
                 responseDto?.toDomain() ?: Account()
             }
+    }
+
+    override suspend fun getUsername(): Flow<String> {
+        return compulynxPreferences.getName()
     }
 }

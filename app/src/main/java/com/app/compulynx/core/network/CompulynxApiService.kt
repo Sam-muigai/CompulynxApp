@@ -37,7 +37,7 @@ class CompulynxApiServiceImpl(private val client: HttpClient) : CompulynxApiServ
     }
 
     companion object {
-        const val BASE_URL = "http://192.168.1.107:8092/springboot-rest-api"
+        const val BASE_URL = "http://192.168.100.72:8092/springboot-rest-api"
         const val LOGIN = "${BASE_URL}/api/v1/customers/login"
         const val GET_ACCOUNT_DETAILS = "${BASE_URL}/api/v1/accounts/balance"
         const val SEND_MONEY = "${BASE_URL}/api/v1/transactions/send-money"
