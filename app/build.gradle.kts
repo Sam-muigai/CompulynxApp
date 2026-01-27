@@ -71,4 +71,7 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     implementation(libs.hilt.compose)
     ksp(libs.dagger.hilt.compiler)
+
+    // datastore
+    implementation(libs.datastore.preferences)
 }
