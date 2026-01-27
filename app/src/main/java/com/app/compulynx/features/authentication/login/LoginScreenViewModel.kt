@@ -1,33 +1,58 @@
 package com.app.compulynx.features.authentication.login
 
+import androidx.compose.runtime.snapshotFlow
+import androidx.lifecycle.viewModelScope
 import com.app.compulynx.core.base.BaseViewModel
+import com.app.compulynx.core.base.SnackbarController
+import com.app.compulynx.core.base.SnackbarEvent
 import com.app.compulynx.core.base.UiEffect
 import com.app.compulynx.core.base.UiEvent
 import com.app.compulynx.core.base.UiState
-import com.app.compulynx.core.base.validateCustomerId
-import com.app.compulynx.core.base.validatePin
+import com.app.compulynx.core.base.Validator
+import com.app.compulynx.domain.models.LoginRequest
+import com.app.compulynx.domain.repositories.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 typealias ScreenModel = BaseViewModel<LoginScreenState, LoginScreenEvent, LoginScreenEffect>
 
 
 @HiltViewModel
-class LoginScreenViewModel @Inject constructor() : ScreenModel(LoginScreenState()) {
+class LoginScreenViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ScreenModel(LoginScreenState()) {
+
     override fun handleEvent(event: LoginScreenEvent) {
         when (event) {
             is LoginScreenEvent.OnCustomerIdChange -> {
-                val id = event.id
-                val customerIdError = validateCustomerId(id)
-                setState { copy(customerId = id, customerIdError = customerIdError) }
-                updateFormValidState()
+                val error = Validator.validateCustomerId(event.id)
+                setState {
+                    copy(
+                        customerId = event.id,
+                        customerIdError = error,
+                        isFormValid = validateForm(event.id, pin, error, pinError)
+                    )
+                }
             }
 
             is LoginScreenEvent.OnPinChange -> {
-                val pin = event.pin
-                val pinError = validatePin(pin)
-                setState { copy(pin = pin, pinError = pinError) }
-                updateFormValidState()
+                val pinNumber = event.pin.filter { it.isDigit() }
+                val error = Validator.validatePin(pinNumber)
+                setState {
+                    copy(
+                        pin = pinNumber,
+                        pinError = error,
+                        isFormValid = validateForm(customerId, pinNumber, customerIdError, error)
+                    )
+                }
             }
 
             LoginScreenEvent.OnPinVisibleChange -> {
@@ -35,23 +60,26 @@ class LoginScreenViewModel @Inject constructor() : ScreenModel(LoginScreenState(
             }
 
             LoginScreenEvent.OnLoginButtonClick -> {
-                if (validateForm()) {
-                    signInUser()
-                }
+                signInUser()
             }
         }
     }
 
-    private fun validateForm(): Boolean {
-        return true
-    }
-
     private fun signInUser() {
-
+        viewModelScope.launch {
+            val loginRequest = LoginRequest(state.value.customerId, state.value.pin)
+            authRepository.login(loginRequest)
+                .onSuccess { message ->
+                    SnackbarController.sendEvent(SnackbarEvent(message))
+                    sendEffect(LoginScreenEffect.NavigateToHome)
+                }.onFailure { e ->
+                    SnackbarController.sendEvent(SnackbarEvent(e.message ?: "Something went wrong"))
+                }
+        }
     }
 
-    private fun updateFormValidState() {
-
+    private fun validateForm(id: String, pin: String, idErr: String?, pinErr: String?): Boolean {
+        return idErr == null && pinErr == null && id.isNotEmpty() && pin.isNotEmpty()
     }
 }
 

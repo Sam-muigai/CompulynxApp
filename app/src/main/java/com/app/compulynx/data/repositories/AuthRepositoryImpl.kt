@@ -5,8 +5,9 @@ import com.app.compulynx.data.helpers.mapResult
 import com.app.compulynx.data.mappers.toDto
 import com.app.compulynx.domain.models.LoginRequest
 import com.app.compulynx.domain.repositories.AuthRepository
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val apiService: CompulynxApiService
 ) : AuthRepository {
     override suspend fun login(loginRequest: LoginRequest): Result<String> {
