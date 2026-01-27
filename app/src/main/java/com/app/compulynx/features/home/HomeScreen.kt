@@ -1,6 +1,6 @@
 package com.app.compulynx.features.home
 
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,18 +30,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.compulynx.R
 import com.app.compulynx.core.ui.components.LynxButton
 import com.app.compulynx.features.home.components.AccountBalanceCard
-import com.app.compulynx.features.home.components.TransactionCard
+import com.app.compulynx.features.components.TransactionCard
 
 @Composable
 fun HomeScreen(
     homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
-    onSendMoneyClick: () -> Unit
+    onSendMoneyClick: () -> Unit,
+    onViewAllTransactionsClick: () -> Unit
 ) {
     val homeScreenState = homeScreenViewModel.state.collectAsStateWithLifecycle().value
     HomeScreenContent(
         homeScreenState = homeScreenState,
         onEvent = homeScreenViewModel::handleEvent,
-        onSendMoneyClick = onSendMoneyClick
+        onSendMoneyClick = onSendMoneyClick,
+        onViewAllTransactionsClick = onViewAllTransactionsClick
     )
 }
 
@@ -51,7 +54,8 @@ fun HomeScreenContent(
     modifier: Modifier = Modifier,
     homeScreenState: HomeScreenState,
     onEvent: (HomeScreenEvent) -> Unit,
-    onSendMoneyClick: () -> Unit
+    onSendMoneyClick: () -> Unit,
+    onViewAllTransactionsClick: () -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier,
@@ -113,19 +117,24 @@ fun HomeScreenContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        "Last Transactions",
+                        "Recent Transactions",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Medium
                         )
                     )
                     TextButton(
-                        onClick = {}
+                        onClick = onViewAllTransactionsClick
                     ) {
                         Text(
                             "View All",
                             color = MaterialTheme.colorScheme.surfaceContainer
                         )
                     }
+                }
+            }
+            item {
+                AnimatedVisibility(homeScreenState.isTransactionLoading) {
+                    CircularProgressIndicator(modifier = Modifier.size(32.dp))
                 }
             }
             items(homeScreenState.transactions) { transaction ->

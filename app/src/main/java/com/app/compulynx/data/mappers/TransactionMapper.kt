@@ -16,6 +16,7 @@ fun TransactionDto.toDomain(): Transaction {
         customerId = customerId ?: "",
         debitOrCredit = debitOrCredit ?: "",
         transactionType = transactionType ?: "",
+        transactionId = transactionId ?: "",
     )
 }
 
