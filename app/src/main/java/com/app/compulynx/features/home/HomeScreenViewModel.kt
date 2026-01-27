@@ -10,6 +10,7 @@ import com.app.compulynx.core.base.UiState
 import com.app.compulynx.domain.models.Transaction
 import com.app.compulynx.domain.repositories.AccountRepository
 import com.app.compulynx.domain.repositories.TransactionRepository
+import com.app.compulynx.utils.format
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -71,7 +72,7 @@ class HomeScreenViewModel @Inject constructor(
                     setState {
                         copy(
                             isBalanceLoading = false,
-                            balance = accountDetails.balance.toString(),
+                            balance = accountDetails.balance.format(),
                             isBalanceVisible = true
                         )
                     }
