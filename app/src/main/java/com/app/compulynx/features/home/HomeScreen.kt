@@ -1,14 +1,17 @@
 package com.app.compulynx.features.home
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,16 +25,19 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.compulynx.R
 import com.app.compulynx.core.base.CollectOneTimeEvent
 import com.app.compulynx.core.ui.components.LynxButton
+import com.app.compulynx.core.ui.components.LynxOutlineButton
 import com.app.compulynx.features.home.components.AccountBalanceCard
 import com.app.compulynx.features.components.TransactionCard
 
@@ -41,7 +47,8 @@ fun HomeScreen(
     onSendMoneyClick: () -> Unit,
     onViewAllTransactionsClick: () -> Unit,
     navigateToLogin: () -> Unit,
-    onProfileClick: () -> Unit = {}
+    onProfileClick: () -> Unit = {},
+    onViewLocalTransactionsClick: () -> Unit = {}
 ) {
     val homeScreenState = homeScreenViewModel.state.collectAsStateWithLifecycle().value
 
@@ -53,12 +60,17 @@ fun HomeScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        homeScreenViewModel.getMiniStatement()
+    }
+
     HomeScreenContent(
         homeScreenState = homeScreenState,
         onEvent = homeScreenViewModel::handleEvent,
         onSendMoneyClick = onSendMoneyClick,
         onViewAllTransactionsClick = onViewAllTransactionsClick,
-        onProfileClick = onProfileClick
+        onProfileClick = onProfileClick,
+        onViewLocalTransactionsClick = onViewLocalTransactionsClick
     )
 }
 
@@ -71,7 +83,8 @@ fun HomeScreenContent(
     onEvent: (HomeScreenEvent) -> Unit,
     onSendMoneyClick: () -> Unit,
     onViewAllTransactionsClick: () -> Unit = {},
-    onProfileClick: () -> Unit = {}
+    onProfileClick: () -> Unit = {},
+    onViewLocalTransactionsClick: () -> Unit
 ) {
     Scaffold(
         modifier = modifier,
@@ -116,8 +129,40 @@ fun HomeScreenContent(
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    AnimatedContent(homeScreenState.isSyncing) { syncing ->
+                        when (syncing) {
+                            true -> {
+                                Text(
+                                    "Syncing ${homeScreenState.syncingTransactionCount} transactions",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                            }
+
+                            false -> {
+                                Text(
+                                    "No pending transactions",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                            }
+                        }
+                    }
+                    LynxOutlineButton(
+                        shape = MaterialTheme.shapes.medium,
+                        onClick = onViewLocalTransactionsClick,
+                        content = {
+                            Text("View Local Transactions")
+                        },
+                    )
+                }
+            }
+            spacer()
             item {
                 AccountBalanceCard(
                     isBalanceVisible = homeScreenState.isBalanceVisible,
@@ -128,6 +173,7 @@ fun HomeScreenContent(
                     }
                 )
             }
+            spacer()
             item {
                 LynxButton(
                     modifier = Modifier.fillMaxWidth(),
@@ -147,6 +193,7 @@ fun HomeScreenContent(
                     onClick = onSendMoneyClick
                 )
             }
+            spacer()
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -169,6 +216,7 @@ fun HomeScreenContent(
                     }
                 }
             }
+            spacer()
             item {
                 AnimatedVisibility(homeScreenState.isTransactionLoading) {
                     Row(
@@ -179,9 +227,35 @@ fun HomeScreenContent(
                     }
                 }
             }
-            items(homeScreenState.transactions) { transaction ->
+            spacer()
+            item {
+                AnimatedVisibility(!homeScreenState.isTransactionLoading && homeScreenState.transactions.isEmpty()) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        Text(
+                            "No transactions yet. Click on send money to start transacting.",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
+            if (homeScreenState.transactions.isEmpty()) {
+                spacer()
+            }
+            items(
+                homeScreenState.transactions,
+                key = { it.id }
+            ) { transaction ->
                 TransactionCard(transaction = transaction)
             }
         }
+    }
+}
+
+private fun LazyListScope.spacer(height: Dp = 16.dp) {
+    item {
+        Spacer(Modifier.height(height))
     }
 }

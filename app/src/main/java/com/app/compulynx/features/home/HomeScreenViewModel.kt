@@ -7,6 +7,7 @@ import com.app.compulynx.core.base.SnackbarEvent
 import com.app.compulynx.core.base.UiEffect
 import com.app.compulynx.core.base.UiEvent
 import com.app.compulynx.core.base.UiState
+import com.app.compulynx.core.work.status.SyncManager
 import com.app.compulynx.domain.models.Transaction
 import com.app.compulynx.domain.repositories.AccountRepository
 import com.app.compulynx.domain.repositories.AuthRepository
@@ -14,7 +15,8 @@ import com.app.compulynx.domain.repositories.TransactionRepository
 import com.app.compulynx.utils.format
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,14 +27,25 @@ typealias ScreenModel = BaseViewModel<HomeScreenState, HomeScreenEvent, HomeScre
 class HomeScreenViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val accountRepository: AccountRepository,
-    private val transactionRepository: TransactionRepository
+    private val transactionRepository: TransactionRepository,
+    private val syncManager: SyncManager
 ) : ScreenModel(HomeScreenState()) {
 
     init {
         viewModelScope.launch {
-            val username = accountRepository.getUsername().first()
-            setState { copy(username = username) }
-            getMiniStatement()
+            combine(
+                accountRepository.getUsername(),
+                syncManager.isSyncing,
+                transactionRepository.getSyncingTransactions()
+            ) { username, isSyncing, syncingTransactions ->
+                setState {
+                    copy(
+                        isSyncing = isSyncing,
+                        username = username,
+                        syncingTransactionCount = syncingTransactions.size
+                    )
+                }
+            }.launchIn(this)
         }
     }
 
@@ -53,25 +66,26 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getMiniStatement() {
+    fun getMiniStatement() {
         setState { copy(isTransactionLoading = true) }
-        transactionRepository.getMiniStatement()
-            .onSuccess { transactions ->
-                setState {
-                    copy(
-                        isTransactionLoading = false,
-                        transactions = transactions
+        viewModelScope.launch {
+            transactionRepository.getMiniStatement()
+                .onSuccess { transactions ->
+                    setState {
+                        copy(
+                            isTransactionLoading = false,
+                            transactions = transactions
+                        )
+                    }
+                }.onFailure {
+                    setState { copy(isTransactionLoading = false) }
+                    SnackbarController.sendEvent(
+                        SnackbarEvent(
+                            it.message ?: "Error fetching transactions"
+                        )
                     )
                 }
-            }.onFailure {
-                setState { copy(isTransactionLoading = false) }
-                SnackbarController.sendEvent(
-                    SnackbarEvent(
-                        it.message ?: "Error fetching transactions"
-                    )
-                )
-            }
-
+        }
     }
 
     private fun fetchAccountDetails() {
@@ -108,10 +122,12 @@ class HomeScreenViewModel @Inject constructor(
 data class HomeScreenState(
     val username: String = "",
     val isBalanceLoading: Boolean = false,
+    val isSyncing: Boolean = false,
     val isTransactionLoading: Boolean = false,
     val transactions: List<Transaction> = emptyList(),
     val isBalanceVisible: Boolean = false,
-    val balance: String = ""
+    val balance: String = "",
+    val syncingTransactionCount: Int = 0
 ) : UiState
 
 

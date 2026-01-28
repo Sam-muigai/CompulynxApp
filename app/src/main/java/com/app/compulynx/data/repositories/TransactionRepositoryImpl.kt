@@ -11,10 +11,13 @@ import com.app.compulynx.core.network.dtos.TransactionRequestDto
 import com.app.compulynx.core.network.helpers.NetworkResult
 import com.app.compulynx.data.helpers.mapResult
 import com.app.compulynx.data.mappers.toDomain
+import com.app.compulynx.domain.models.LocalTransaction
 import com.app.compulynx.domain.models.SendMoneyRequest
 import com.app.compulynx.domain.models.Transaction
 import com.app.compulynx.domain.repositories.TransactionRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import java.time.LocalDateTime
@@ -58,8 +61,14 @@ class TransactionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun syncLocalTransactions() {
-        val localTransactions = localTransactionDao.getQueuedTransactions().first()
-        sendMoneyRequestToBackend(localTransactions)
+        val queuedTransactions =
+            localTransactionDao.getTransactionsBySyncStatus(SyncStatus.QUEUED).first()
+        sendMoneyRequestToBackend(queuedTransactions)
+    }
+
+    override suspend fun getSyncingTransactions(): Flow<List<LocalTransaction>> {
+        return localTransactionDao.getTransactionsBySyncStatus(SyncStatus.SYNCING)
+            .map { it.map { transactionEntity -> transactionEntity.toDomain() } }
     }
 
     private suspend fun sendMoneyRequestToBackend(

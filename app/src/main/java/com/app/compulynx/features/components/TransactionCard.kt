@@ -35,7 +35,8 @@ fun TransactionCard(
     }
     Surface(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surface
     ) {
