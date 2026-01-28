@@ -9,7 +9,6 @@ import io.ktor.client.request.setBody
 suspend inline fun <reified T, reified M> HttpClient.postRequest(
     data: T,
     urlString: String,
-
 ): NetworkResult<M> {
     return safeApiCall {
         post(urlString = urlString) {

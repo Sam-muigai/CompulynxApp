@@ -4,8 +4,8 @@ object Validator {
     fun validatePin(pin: String): String? {
         return when {
             pin.isEmpty() -> null
-            pin.length < 4 -> "Pin must be contain exactly 4 digits"
-            pin.length > 4 -> "Pin must be contain exactly 4 digits"
+            pin.length < 4 -> "Pin must contain exactly 4 digits"
+            pin.length > 4 -> "Pin must contain exactly 4 digits"
             else -> null
         }
     }

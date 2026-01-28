@@ -63,7 +63,15 @@ class SendMoneyScreenViewModel @Inject constructor(
     }
 
     private fun sendMoney() {
-        // TODO: Initiate a worker to perform the transaction
+        viewModelScope.launch {
+            val sendMoneyRequest = SendMoneyRequest(
+                amount = state.value.amount.toInt(),
+                accountTo = state.value.accountTo
+            )
+            transactionRepository.sendMoney(sendMoneyRequest)
+            SnackbarController.sendEvent(SnackbarEvent(message = "Transaction queued for processing successfully"))
+            sendEffect(SendMoneyScreenEffect.NavigateBack)
+        }
     }
 
     private fun validateForm(

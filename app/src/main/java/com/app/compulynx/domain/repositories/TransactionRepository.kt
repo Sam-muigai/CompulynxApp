@@ -7,5 +7,5 @@ import com.app.compulynx.domain.models.Transaction
 interface TransactionRepository {
     suspend fun getLast100Transactions(): Result<List<Transaction>>
     suspend fun getMiniStatement(): Result<List<Transaction>>
-    suspend fun sendMoney(sendMoneyRequest: SendMoneyRequest): Result<SendMoneyResponse>
+    suspend fun sendMoney(sendMoneyRequest: SendMoneyRequest)
 }
