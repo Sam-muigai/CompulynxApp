@@ -72,8 +72,8 @@ class SendMoneyScreenViewModel @Inject constructor(
             )
             transactionRepository.saveLocalTransaction(sendMoneyRequest)
             syncManager.requestSync()
-            SnackbarController.sendEvent(SnackbarEvent(message = "Transaction queued for processing successfully"))
             sendEffect(SendMoneyScreenEffect.NavigateBack)
+            SnackbarController.sendEvent(SnackbarEvent(message = "Transaction queued for processing successfully"))
         }
     }
 
