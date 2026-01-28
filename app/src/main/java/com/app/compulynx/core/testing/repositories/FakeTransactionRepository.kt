@@ -12,8 +12,8 @@ import java.util.UUID
 
 class FakeTransactionRepository : TransactionRepository {
     private val localTransactionsList = mutableListOf<LocalTransaction>()
-    private val _localTransactionsFlow = MutableStateFlow<List<LocalTransaction>>(emptyList())
-    private val _syncingTransactionsFlow = MutableStateFlow<List<LocalTransaction>>(emptyList())
+    private val localTransactionsFlow = MutableStateFlow<List<LocalTransaction>>(emptyList())
+    private val syncingTransactionsFlow = MutableStateFlow<List<LocalTransaction>>(emptyList())
     private var last100Result: Result<List<Transaction>> = Result.success(emptyList())
     private var miniStatementResult: Result<List<Transaction>> = Result.success(emptyList())
 
@@ -36,16 +36,16 @@ class FakeTransactionRepository : TransactionRepository {
                 amount = sendMoneyRequest.amount.toDouble(),
             )
         localTransactionsList.add(newTransaction)
-        _localTransactionsFlow.value = localTransactionsList.toList()
+        localTransactionsFlow.value = localTransactionsList.toList()
     }
 
     override suspend fun syncLocalTransactions() {
         syncCalled = true
     }
 
-    override fun getSyncingTransactions(): Flow<List<LocalTransaction>> = _syncingTransactionsFlow
+    override fun getSyncingTransactions(): Flow<List<LocalTransaction>> = syncingTransactionsFlow
 
-    override fun getAllLocalTransactions(): Flow<List<LocalTransaction>> = _localTransactionsFlow
+    override fun getAllLocalTransactions(): Flow<List<LocalTransaction>> = localTransactionsFlow
 
     fun setLast100Result(result: Result<List<Transaction>>) {
         last100Result = result
@@ -56,6 +56,6 @@ class FakeTransactionRepository : TransactionRepository {
     }
 
     fun emitSyncingTransactions(list: List<LocalTransaction>) {
-        _syncingTransactionsFlow.value = list
+        syncingTransactionsFlow.value = list
     }
 }

@@ -6,36 +6,36 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeAccountRepository : AccountRepository {
-    private val _username = MutableStateFlow("")
-    private val _email = MutableStateFlow("")
-    private val _customerId = MutableStateFlow("")
-    private val _accountNumber = MutableStateFlow("")
+    private val username = MutableStateFlow("")
+    private val email = MutableStateFlow("")
+    private val customerId = MutableStateFlow("")
+    private val accountNumber = MutableStateFlow("")
     private var accountResult: Result<Account> = Result.success(Account())
 
     override suspend fun getAccountDetails(): Result<Account> = accountResult
 
-    override fun getUsername(): Flow<String> = _username
+    override fun getUsername(): Flow<String> = username
 
-    override fun getEmail(): Flow<String> = _email
+    override fun getEmail(): Flow<String> = email
 
-    override fun getCustomerId(): Flow<String> = _customerId
+    override fun getCustomerId(): Flow<String> = customerId
 
-    override fun getAccountNumber(): Flow<String> = _accountNumber
+    override fun getAccountNumber(): Flow<String> = accountNumber
 
     fun emitUsername(value: String) {
-        _username.value = value
+        username.value = value
     }
 
     fun emitEmail(value: String) {
-        _email.value = value
+        email.value = value
     }
 
     fun emitCustomerId(value: String) {
-        _customerId.value = value
+        customerId.value = value
     }
 
     fun emitAccountNumber(value: String) {
-        _accountNumber.value = value
+        accountNumber.value = value
     }
 
     fun setAccountResult(result: Result<Account>) {
