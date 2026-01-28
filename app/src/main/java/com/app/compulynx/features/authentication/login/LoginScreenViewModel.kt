@@ -66,13 +66,16 @@ class LoginScreenViewModel @Inject constructor(
     }
 
     private fun signInUser() {
+        setState { copy(isLoading = true) }
         viewModelScope.launch {
             val loginRequest = LoginRequest(state.value.customerId, state.value.pin)
             authRepository.login(loginRequest)
                 .onSuccess { message ->
+                    setState { copy(isLoading = false) }
                     SnackbarController.sendEvent(SnackbarEvent(message))
                     sendEffect(LoginScreenEffect.NavigateToHome)
                 }.onFailure { e ->
+                    setState { copy(isLoading = false) }
                     SnackbarController.sendEvent(SnackbarEvent(e.message ?: "Something went wrong"))
                 }
         }

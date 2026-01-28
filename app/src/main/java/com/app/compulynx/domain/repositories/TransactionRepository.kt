@@ -10,6 +10,6 @@ interface TransactionRepository {
     suspend fun getMiniStatement(): Result<List<Transaction>>
     suspend fun saveLocalTransaction(sendMoneyRequest: SendMoneyRequest)
     suspend fun syncLocalTransactions()
-
-    suspend fun getSyncingTransactions(): Flow<List<LocalTransaction>>
+    fun getSyncingTransactions(): Flow<List<LocalTransaction>>
+    fun getAllLocalTransactions(): Flow<List<LocalTransaction>>
 }

@@ -66,8 +66,13 @@ class TransactionRepositoryImpl @Inject constructor(
         sendMoneyRequestToBackend(queuedTransactions)
     }
 
-    override suspend fun getSyncingTransactions(): Flow<List<LocalTransaction>> {
+    override fun getSyncingTransactions(): Flow<List<LocalTransaction>> {
         return localTransactionDao.getTransactionsBySyncStatus(SyncStatus.SYNCING)
+            .map { it.map { transactionEntity -> transactionEntity.toDomain() } }
+    }
+
+    override fun getAllLocalTransactions(): Flow<List<LocalTransaction>> {
+        return localTransactionDao.getAllTransactions()
             .map { it.map { transactionEntity -> transactionEntity.toDomain() } }
     }
 

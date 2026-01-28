@@ -1,4 +1,4 @@
-package com.app.compulynx.features.transaction.listTransactions
+package com.app.compulynx.features.transaction.transactionList
 
 import androidx.lifecycle.viewModelScope
 import com.app.compulynx.core.base.BaseViewModel

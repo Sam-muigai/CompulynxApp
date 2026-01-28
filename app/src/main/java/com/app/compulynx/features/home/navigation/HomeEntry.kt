@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.NavKey
 import com.app.compulynx.features.authentication.navigation.Login
 import com.app.compulynx.features.home.HomeScreen
 import com.app.compulynx.features.profile.navigation.Profile
+import com.app.compulynx.features.transaction.navigation.LocalTransaction
 import com.app.compulynx.features.transaction.navigation.SendMoney
 import com.app.compulynx.features.transaction.navigation.TransactionList
 import kotlinx.serialization.Serializable
@@ -30,6 +31,9 @@ fun EntryProviderScope<NavKey>.homeEntry(backStack: NavBackStack<NavKey>) {
             },
             onProfileClick = {
                 backStack.add(Profile)
+            },
+            onViewLocalTransactionsClick = {
+                backStack.add(LocalTransaction)
             }
         )
     }

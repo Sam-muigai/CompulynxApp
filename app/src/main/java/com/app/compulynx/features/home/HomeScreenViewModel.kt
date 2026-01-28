@@ -32,21 +32,19 @@ class HomeScreenViewModel @Inject constructor(
 ) : ScreenModel(HomeScreenState()) {
 
     init {
-        viewModelScope.launch {
-            combine(
-                accountRepository.getUsername(),
-                syncManager.isSyncing,
-                transactionRepository.getSyncingTransactions()
-            ) { username, isSyncing, syncingTransactions ->
-                setState {
-                    copy(
-                        isSyncing = isSyncing,
-                        username = username,
-                        syncingTransactionCount = syncingTransactions.size
-                    )
-                }
-            }.launchIn(this)
-        }
+        combine(
+            accountRepository.getUsername(),
+            syncManager.isSyncing,
+            transactionRepository.getSyncingTransactions()
+        ) { username, isSyncing, syncingTransactions ->
+            setState {
+                copy(
+                    isSyncing = isSyncing,
+                    username = username,
+                    syncingTransactionCount = syncingTransactions.size
+                )
+            }
+        }.launchIn(viewModelScope)
     }
 
 
