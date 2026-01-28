@@ -26,20 +26,27 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.app.compulynx.core.base.CollectOneTimeEvent
 import com.app.compulynx.core.ui.components.LynxButton
 import com.app.compulynx.core.ui.components.LynxTextField
-import com.app.compulynx.features.authentication.login.LoginScreenEvent
 
 @Composable
 fun SendMoneyScreen(
     sendMoneyScreenViewModel: SendMoneyScreenViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onNavigateBack: () -> Unit
 ) {
     val sendMoneyScreenState = sendMoneyScreenViewModel.state.collectAsStateWithLifecycle().value
+    CollectOneTimeEvent(
+        sendMoneyScreenViewModel.effect
+    ) { effect ->
+        when (effect) {
+            SendMoneyScreenEffect.NavigateBack -> onNavigateBack()
+        }
+    }
     SendMoneyScreenContent(
         sendMoneyScreenState = sendMoneyScreenState,
         onEvent = sendMoneyScreenViewModel::handleEvent,
-        onBackClick = onBackClick
+        onBackClick = onNavigateBack
     )
 }
 

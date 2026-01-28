@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.app.compulynx.core.database.CompulynxDatabase
+import com.app.compulynx.core.database.daos.LocalTransactionDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,12 +20,18 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext applicationContext: Context,
-    ): RoomDatabase {
+    ): CompulynxDatabase {
         return Room.databaseBuilder(
             applicationContext,
             CompulynxDatabase::class.java,
             "compulynx_db"
         ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocalTransactionDao(database: CompulynxDatabase): LocalTransactionDao{
+        return database.localTransactionDao()
     }
 
 }
