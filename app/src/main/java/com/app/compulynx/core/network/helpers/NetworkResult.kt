@@ -18,9 +18,9 @@ suspend inline fun <reified T> safeApiCall(call: suspend () -> HttpResponse): Ne
                     response.body(),
                 )
 
-            response.status.value >= 400 && response.status.value < 499 -> {
+            response.status.value >= 400 && response.status.value < 599 -> {
                 NetworkResult.Error(
-                    "Something went wrong!!",
+                    response.body<String?>() ?: "Something went wrong",
                 )
             }
 
