@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.app.compulynx.features.profile.components.InformationCard
 
 @Composable
 fun ProfileScreen(
@@ -73,12 +74,23 @@ fun ProfileScreenContent(
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text("Name: ${profileScreenState.name}")
-            Text("Email: ${profileScreenState.email}")
-            Text("Customer ID: ${profileScreenState.customerId}")
-            Text("Account Number: ${profileScreenState.accountNumber}")
+            InformationCard(
+                label = "Name",
+                value = profileScreenState.name
+            )
+            InformationCard(
+                label = "Email",
+                value = profileScreenState.email
+            )
+            InformationCard(
+                label = "Customer ID",
+                value = profileScreenState.customerId
+            )
+            InformationCard(
+                label = "Account Number",
+                value = profileScreenState.accountNumber
+            )
         }
     }
 }
