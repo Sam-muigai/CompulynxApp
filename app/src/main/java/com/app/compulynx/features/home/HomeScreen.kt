@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,8 +37,8 @@ import com.app.compulynx.R
 import com.app.compulynx.core.base.CollectOneTimeEvent
 import com.app.compulynx.core.ui.components.LynxButton
 import com.app.compulynx.core.ui.components.LynxOutlineButton
-import com.app.compulynx.features.home.components.AccountBalanceCard
 import com.app.compulynx.features.components.TransactionCard
+import com.app.compulynx.features.home.components.AccountBalanceCard
 
 @Composable
 fun HomeScreen(
@@ -48,12 +47,12 @@ fun HomeScreen(
     onViewAllTransactionsClick: () -> Unit,
     navigateToLogin: () -> Unit,
     onProfileClick: () -> Unit = {},
-    onViewLocalTransactionsClick: () -> Unit = {}
+    onViewLocalTransactionsClick: () -> Unit = {},
 ) {
     val homeScreenState = homeScreenViewModel.state.collectAsStateWithLifecycle().value
 
     CollectOneTimeEvent(
-        homeScreenViewModel.effect
+        homeScreenViewModel.effect,
     ) { effect ->
         when (effect) {
             HomeScreenEffect.NavigateToLogin -> navigateToLogin()
@@ -70,10 +69,9 @@ fun HomeScreen(
         onSendMoneyClick = onSendMoneyClick,
         onViewAllTransactionsClick = onViewAllTransactionsClick,
         onProfileClick = onProfileClick,
-        onViewLocalTransactionsClick = onViewLocalTransactionsClick
+        onViewLocalTransactionsClick = onViewLocalTransactionsClick,
     )
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +82,7 @@ fun HomeScreenContent(
     onSendMoneyClick: () -> Unit,
     onViewAllTransactionsClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
-    onViewLocalTransactionsClick: () -> Unit
+    onViewLocalTransactionsClick: () -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -93,48 +91,50 @@ fun HomeScreenContent(
                 title = {
                     Text(
                         "Welcome ${homeScreenState.username} 👋",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.Medium
-                        )
+                        style =
+                            MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Medium,
+                            ),
                     )
                 },
                 actions = {
                     IconButton(
                         onClick = {
                             onEvent(HomeScreenEvent.OnLogoutClick)
-                        }
+                        },
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_logout),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                     IconButton(
-                        onClick = onProfileClick
+                        onClick = onProfileClick,
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_account),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
-
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                    ),
             )
-        }
+        },
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp),
         ) {
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     AnimatedContent(homeScreenState.isSyncing) { syncing ->
                         when (syncing) {
@@ -170,7 +170,7 @@ fun HomeScreenContent(
                     isBalanceLoading = homeScreenState.isBalanceLoading,
                     onCheckBalanceClick = {
                         onEvent(HomeScreenEvent.OnViewBalanceClick)
-                    }
+                    },
                 )
             }
             spacer()
@@ -179,18 +179,18 @@ fun HomeScreenContent(
                     modifier = Modifier.fillMaxWidth(),
                     content = {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text("Send Money")
                             Spacer(Modifier.width(8.dp))
                             Icon(
                                 modifier = Modifier.size(16.dp),
                                 painter = painterResource(R.drawable.ic_send),
-                                contentDescription = null
+                                contentDescription = null,
                             )
                         }
                     },
-                    onClick = onSendMoneyClick
+                    onClick = onSendMoneyClick,
                 )
             }
             spacer()
@@ -198,20 +198,21 @@ fun HomeScreenContent(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         "Recent Transactions",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.Medium
-                        )
+                        style =
+                            MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Medium,
+                            ),
                     )
                     TextButton(
-                        onClick = onViewAllTransactionsClick
+                        onClick = onViewAllTransactionsClick,
                     ) {
                         Text(
                             "View All",
-                            color = MaterialTheme.colorScheme.surfaceContainer
+                            color = MaterialTheme.colorScheme.surfaceContainer,
                         )
                     }
                 }
@@ -236,7 +237,7 @@ fun HomeScreenContent(
                     ) {
                         Text(
                             "No transactions yet. Click on send money to start transacting.",
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                     }
                 }
@@ -246,7 +247,7 @@ fun HomeScreenContent(
             }
             items(
                 homeScreenState.transactions,
-                key = { it.id }
+                key = { it.id },
             ) { transaction ->
                 TransactionCard(transaction = transaction)
             }

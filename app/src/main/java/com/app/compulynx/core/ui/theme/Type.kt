@@ -20,20 +20,21 @@ val geist =
     )
 
 val baseline = Typography()
-val Typography = Typography(
-    displayLarge = baseline.displayLarge.copy(fontFamily = geist),
-    displayMedium = baseline.displayMedium.copy(fontFamily = geist),
-    displaySmall = baseline.displaySmall.copy(fontFamily = geist),
-    headlineLarge = baseline.headlineLarge.copy(fontFamily = geist),
-    headlineMedium = baseline.headlineMedium.copy(fontFamily = geist),
-    headlineSmall = baseline.headlineSmall.copy(fontFamily = geist),
-    titleLarge = baseline.titleLarge.copy(fontFamily = geist),
-    titleMedium = baseline.titleMedium.copy(fontFamily = geist),
-    titleSmall = baseline.titleSmall.copy(fontFamily = geist),
-    bodyLarge = baseline.bodyLarge.copy(fontFamily = geist),
-    bodyMedium = baseline.bodyMedium.copy(fontFamily = geist),
-    bodySmall = baseline.bodySmall.copy(fontFamily = geist),
-    labelLarge = baseline.labelLarge.copy(fontFamily = geist),
-    labelMedium = baseline.labelMedium.copy(fontFamily = geist),
-    labelSmall = baseline.labelSmall.copy(fontFamily = geist)
-)
+val Typography =
+    Typography(
+        displayLarge = baseline.displayLarge.copy(fontFamily = geist),
+        displayMedium = baseline.displayMedium.copy(fontFamily = geist),
+        displaySmall = baseline.displaySmall.copy(fontFamily = geist),
+        headlineLarge = baseline.headlineLarge.copy(fontFamily = geist),
+        headlineMedium = baseline.headlineMedium.copy(fontFamily = geist),
+        headlineSmall = baseline.headlineSmall.copy(fontFamily = geist),
+        titleLarge = baseline.titleLarge.copy(fontFamily = geist),
+        titleMedium = baseline.titleMedium.copy(fontFamily = geist),
+        titleSmall = baseline.titleSmall.copy(fontFamily = geist),
+        bodyLarge = baseline.bodyLarge.copy(fontFamily = geist),
+        bodyMedium = baseline.bodyMedium.copy(fontFamily = geist),
+        bodySmall = baseline.bodySmall.copy(fontFamily = geist),
+        labelLarge = baseline.labelLarge.copy(fontFamily = geist),
+        labelMedium = baseline.labelMedium.copy(fontFamily = geist),
+        labelSmall = baseline.labelSmall.copy(fontFamily = geist),
+    )

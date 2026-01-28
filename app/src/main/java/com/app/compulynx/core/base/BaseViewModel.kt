@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<State : UiState, Event : UiEvent, Effect : UiEffect>(
-    private val initialState: State
+    private val initialState: State,
 ) : ViewModel() {
     abstract fun handleEvent(event: Event)
 
@@ -21,7 +21,6 @@ abstract class BaseViewModel<State : UiState, Event : UiEvent, Effect : UiEffect
         get() = state.value
     private val _effect = Channel<Effect>()
     val effect = _effect.receiveAsFlow()
-
 
     protected fun setState(reducer: State.() -> State) {
         _state.update { currentState.reducer() }

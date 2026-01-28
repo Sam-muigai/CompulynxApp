@@ -1,7 +1,6 @@
 package com.app.compulynx.features.transaction.transactionList
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -38,12 +37,12 @@ import com.app.compulynx.features.components.TransactionCard
 @Composable
 fun TransactionListScreen(
     transactionListScreenViewModel: TransactionListScreenViewModel = hiltViewModel(),
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
 ) {
     val transactionListScreenState by transactionListScreenViewModel.state.collectAsStateWithLifecycle()
     TransactionListScreenContent(
         transactionListScreenState = transactionListScreenState,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
     )
 }
 
@@ -52,7 +51,7 @@ fun TransactionListScreen(
 fun TransactionListScreenContent(
     modifier: Modifier = Modifier,
     transactionListScreenState: TransactionListScreenState,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
@@ -60,43 +59,46 @@ fun TransactionListScreenContent(
             TopAppBar(
                 navigationIcon = {
                     IconButton(
-                        onClick = onBackClick
+                        onClick = onBackClick,
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
                         )
                     }
                 },
                 title = {
                     Text(
                         "Transactions",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Medium
-                        )
+                        style =
+                            MaterialTheme.typography.titleLarge.copy(
+                                fontWeight = FontWeight.Medium,
+                            ),
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                    ),
             )
-        }
+        },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(16.dp)
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp),
         ) {
             AnimatedContent(transactionListScreenState) { listScreenState ->
                 when (listScreenState) {
                     is TransactionListScreenState.Error -> {
                         Box(
                             Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             Text(
                                 listScreenState.message,
-                                color = MaterialTheme.colorScheme.error
+                                color = MaterialTheme.colorScheme.error,
                             )
                         }
                     }
@@ -104,10 +106,10 @@ fun TransactionListScreenContent(
                     TransactionListScreenState.Loading -> {
                         Box(
                             Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             CircularProgressIndicator(
-                                modifier = Modifier.size(32.dp)
+                                modifier = Modifier.size(32.dp),
                             )
                         }
                     }
@@ -116,7 +118,7 @@ fun TransactionListScreenContent(
                         TransactionsScreen(
                             modifier = Modifier.fillMaxSize(),
                             transactions = listScreenState.transactions,
-                            totalAmount = listScreenState.totalAmount
+                            totalAmount = listScreenState.totalAmount,
                         )
                     }
                 }
@@ -129,7 +131,7 @@ fun TransactionListScreenContent(
 fun TransactionsScreen(
     modifier: Modifier = Modifier,
     transactions: List<Transaction>,
-    totalAmount: String = ""
+    totalAmount: String = "",
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -142,15 +144,17 @@ fun TransactionsScreen(
         }
         item {
             Surface(
-                modifier = modifier
-                    .fillMaxWidth(),
+                modifier =
+                    modifier
+                        .fillMaxWidth(),
                 shape = MaterialTheme.shapes.medium,
-                color = MaterialTheme.colorScheme.surface
+                color = MaterialTheme.colorScheme.surface,
             ) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
                 ) {
                     Text("Total Transacted Amount: Ksh $totalAmount")
                 }

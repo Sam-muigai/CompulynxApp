@@ -25,13 +25,13 @@ import com.app.compulynx.features.transaction.localTransactions.components.Local
 @Composable
 fun LocalTransactionScreen(
     localTransactionViewModel: LocalTransactionsScreenViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     val localTransactions =
         localTransactionViewModel.localTransactions.collectAsStateWithLifecycle().value
     LocalTransactionScreenContent(
         onBackClick = onBackClick,
-        localTransactions = localTransactions
+        localTransactions = localTransactions,
     )
 }
 
@@ -40,7 +40,7 @@ fun LocalTransactionScreen(
 fun LocalTransactionScreenContent(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-    localTransactions: List<LocalTransaction>
+    localTransactions: List<LocalTransaction>,
 ) {
     Scaffold(
         modifier = modifier,
@@ -48,32 +48,35 @@ fun LocalTransactionScreenContent(
             TopAppBar(
                 navigationIcon = {
                     IconButton(
-                        onClick = onBackClick
+                        onClick = onBackClick,
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
                         )
                     }
                 },
                 title = {
                     Text(
                         "Local Transactions",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Medium
-                        )
+                        style =
+                            MaterialTheme.typography.titleLarge.copy(
+                                fontWeight = FontWeight.Medium,
+                            ),
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                    ),
             )
-        }
+        },
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(16.dp)
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp),
         ) {
             items(localTransactions, key = { it.clientTransactionId }) { transaction ->
                 LocalTransactionCard(localTransaction = transaction)

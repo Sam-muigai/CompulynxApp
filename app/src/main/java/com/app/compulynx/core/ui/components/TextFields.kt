@@ -168,7 +168,7 @@ fun LynxPinTextField(
     unfocusedColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
     guideContent: @Composable (() -> Unit)? = null,
     isPasswordVisible: Boolean = false,
-    onPasswordVisibilityToggle: () -> Unit
+    onPasswordVisibilityToggle: () -> Unit,
 ) {
     LynxTextField(
         modifier = modifier,
@@ -182,20 +182,20 @@ fun LynxPinTextField(
         leadingIcon = leadingIcon,
         trailingIcon = {
             IconButton(
-                onClick = onPasswordVisibilityToggle
+                onClick = onPasswordVisibilityToggle,
             ) {
                 AnimatedContent(isPasswordVisible) { isVisible ->
                     if (isVisible) {
                         Icon(
                             painter = painterResource(R.drawable.eye_closed),
                             contentDescription = "hide password",
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(24.dp),
                         )
                     } else {
                         Icon(
                             painter = painterResource(R.drawable.eye_open),
                             contentDescription = "show password",
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(24.dp),
                         )
                     }
                 }
@@ -210,6 +210,6 @@ fun LynxPinTextField(
         errorColor = errorColor,
         focusedColor = focusedColor,
         unfocusedColor = unfocusedColor,
-        guideContent = guideContent
+        guideContent = guideContent,
     )
 }

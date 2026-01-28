@@ -2,7 +2,6 @@ package com.app.compulynx.core.network.helpers
 
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
@@ -17,10 +16,7 @@ suspend inline fun <reified T, reified M> HttpClient.postRequest(
     }
 }
 
-
-suspend inline fun <reified T> HttpClient.getRequest(
-    urlString: String,
-): NetworkResult<T> {
+suspend inline fun <reified T> HttpClient.getRequest(urlString: String): NetworkResult<T> {
     return safeApiCall {
         get(urlString = urlString)
     }

@@ -11,32 +11,34 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class AccountRepositoryImpl @Inject constructor(
-    private val apiService: CompulynxApiService,
-    private val compulynxPreferences: CompulynxPreferences
-) : AccountRepository {
-    override suspend fun getAccountDetails(): Result<Account> {
-        val customerId =
-            compulynxPreferences.getCustomerId().first()
-        return apiService.getAccountBalance(AccountRequestDto(customerId))
-            .mapResult { responseDto ->
-                responseDto?.toDomain() ?: Account()
-            }
-    }
+class AccountRepositoryImpl
+    @Inject
+    constructor(
+        private val apiService: CompulynxApiService,
+        private val compulynxPreferences: CompulynxPreferences,
+    ) : AccountRepository {
+        override suspend fun getAccountDetails(): Result<Account> {
+            val customerId =
+                compulynxPreferences.getCustomerId().first()
+            return apiService.getAccountBalance(AccountRequestDto(customerId))
+                .mapResult { responseDto ->
+                    responseDto?.toDomain() ?: Account()
+                }
+        }
 
-    override fun getUsername(): Flow<String> {
-        return compulynxPreferences.getName()
-    }
+        override fun getUsername(): Flow<String> {
+            return compulynxPreferences.getName()
+        }
 
-    override fun getEmail(): Flow<String> {
-        return compulynxPreferences.getEmail()
-    }
+        override fun getEmail(): Flow<String> {
+            return compulynxPreferences.getEmail()
+        }
 
-    override fun getCustomerId(): Flow<String> {
-        return compulynxPreferences.getCustomerId()
-    }
+        override fun getCustomerId(): Flow<String> {
+            return compulynxPreferences.getCustomerId()
+        }
 
-    override fun getAccountNumber(): Flow<String> {
-        return compulynxPreferences.getAccountNumber()
+        override fun getAccountNumber(): Flow<String> {
+            return compulynxPreferences.getAccountNumber()
+        }
     }
-}

@@ -7,12 +7,10 @@ import java.util.UUID
 
 class Converters {
     @TypeConverter
-    fun fromTimestamp(value: String?): LocalDateTime? =
-        value?.let { LocalDateTime.parse(it) }
+    fun fromTimestamp(value: String?): LocalDateTime? = value?.let { LocalDateTime.parse(it) }
 
     @TypeConverter
-    fun dateToTimestamp(date: LocalDateTime?): String? =
-        date?.toString()
+    fun dateToTimestamp(date: LocalDateTime?): String? = date?.toString()
 
     @TypeConverter
     fun fromUUID(uuid: UUID?): String? = uuid?.toString()

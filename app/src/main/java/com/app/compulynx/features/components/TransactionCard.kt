@@ -28,29 +28,32 @@ import com.app.compulynx.utils.format
 @Composable
 fun TransactionCard(
     modifier: Modifier = Modifier,
-    transaction: Transaction
+    transaction: Transaction,
 ) {
-    val (iconRes, textColor) = when (transaction.debitOrCredit.lowercase()) {
-        "credit" -> Pair(R.drawable.ic_arrow_downward, Color.Green)
-        else -> Pair(R.drawable.ic_arrow_upward, Color.Red)
-    }
+    val (iconRes, textColor) =
+        when (transaction.debitOrCredit.lowercase()) {
+            "credit" -> Pair(R.drawable.ic_arrow_downward, Color.Green)
+            else -> Pair(R.drawable.ic_arrow_upward, Color.Red)
+        }
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
         shape = MaterialTheme.shapes.medium,
-        color = MaterialTheme.colorScheme.surface
+        color = MaterialTheme.colorScheme.surface,
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Surface(
                 modifier = Modifier,
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.surface
+                color = MaterialTheme.colorScheme.surface,
             ) {
                 Box(
                     modifier = Modifier.padding(12.dp),
@@ -65,24 +68,27 @@ fun TransactionCard(
             Column {
                 Text(
                     text = transaction.transactionId,
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.Medium
-                    )
+                    style =
+                        MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.Medium,
+                        ),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = transaction.transactionType,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.Medium
-                    )
+                    style =
+                        MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Medium,
+                        ),
                 )
             }
             Spacer(Modifier.weight(1f))
             Text(
                 "Ksh ${transaction.amount.format()}",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = textColor,
-                )
+                style =
+                    MaterialTheme.typography.bodyMedium.copy(
+                        color = textColor,
+                    ),
             )
             Spacer(Modifier.width(8.dp))
         }

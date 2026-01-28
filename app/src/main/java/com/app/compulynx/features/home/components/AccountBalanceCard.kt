@@ -34,52 +34,56 @@ fun AccountBalanceCard(
     isBalanceVisible: Boolean = true,
     balance: String,
     isBalanceLoading: Boolean = false,
-    onCheckBalanceClick: () -> Unit
+    onCheckBalanceClick: () -> Unit,
 ) {
-    val gradientBrush = Brush.linearGradient(
-        listOf(
-            MaterialTheme.colorScheme.surfaceContainer,
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
-        ),
-    )
+    val gradientBrush =
+        Brush.linearGradient(
+            listOf(
+                MaterialTheme.colorScheme.surfaceContainer,
+                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
+            ),
+        )
     Surface(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth(),
         color = Color.Transparent,
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium,
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(brush = gradientBrush)
-                .padding(horizontal = 16.dp, vertical = 20.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(brush = gradientBrush)
+                    .padding(horizontal = 16.dp, vertical = 20.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     modifier = Modifier.size(20.dp),
                     painter = painterResource(R.drawable.wallet),
-                    contentDescription = null
+                    contentDescription = null,
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
                     "Your Account Balance",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Medium
-                    )
+                    style =
+                        MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Medium,
+                        ),
                 )
             }
             Spacer(Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Row(
-                    verticalAlignment = Alignment.Bottom
+                    verticalAlignment = Alignment.Bottom,
                 ) {
                     Text(
                         text = "kes",
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
                     )
                     Spacer(Modifier.width(8.dp))
                     AnimatedContent(
@@ -88,16 +92,18 @@ fun AccountBalanceCard(
                         if (isBalanceVisible) {
                             Text(
                                 balance,
-                                style = MaterialTheme.typography.headlineLarge.copy(
-                                    fontWeight = FontWeight.SemiBold
-                                )
+                                style =
+                                    MaterialTheme.typography.headlineLarge.copy(
+                                        fontWeight = FontWeight.SemiBold,
+                                    ),
                             )
                         } else {
                             Text(
                                 "****",
-                                style = MaterialTheme.typography.headlineLarge.copy(
-                                    fontWeight = FontWeight.SemiBold
-                                )
+                                style =
+                                    MaterialTheme.typography.headlineLarge.copy(
+                                        fontWeight = FontWeight.SemiBold,
+                                    ),
                             )
                         }
                     }
@@ -112,7 +118,7 @@ fun AccountBalanceCard(
                             content = {
                                 Text("Check Balance")
                             },
-                            enabled = !isBalanceVisible && !isBalanceLoading
+                            enabled = !isBalanceVisible && !isBalanceLoading,
                         )
                     }
                 }

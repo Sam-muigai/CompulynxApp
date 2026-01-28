@@ -6,7 +6,6 @@ import androidx.navigation3.runtime.NavKey
 import com.app.compulynx.features.profile.ProfileScreen
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data object Profile : NavKey
 
@@ -15,7 +14,7 @@ fun EntryProviderScope<NavKey>.profileEntry(backStack: NavBackStack<NavKey>) {
         ProfileScreen(
             onBackClick = {
                 backStack.removeLastOrNull()
-            }
+            },
         )
     }
 }

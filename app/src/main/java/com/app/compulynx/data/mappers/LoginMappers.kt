@@ -6,6 +6,6 @@ import com.app.compulynx.domain.models.LoginRequest
 fun LoginRequest.toDomain(): LoginRequestDto {
     return LoginRequestDto(
         customerId = customerId,
-        pin = pin
+        pin = pin,
     )
 }

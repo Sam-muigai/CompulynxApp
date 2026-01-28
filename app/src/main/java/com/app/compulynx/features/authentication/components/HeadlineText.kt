@@ -14,22 +14,23 @@ import androidx.compose.ui.unit.dp
 fun HeadlineText(
     modifier: Modifier = Modifier,
     text: String,
-    description: String? = null
+    description: String? = null,
 ) {
     Column {
         Text(
             modifier = modifier,
             text = text,
-            style = MaterialTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Bold
-            )
+            style =
+                MaterialTheme.typography.headlineMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                ),
         )
         description?.let {
             Spacer(Modifier.height(4.dp))
             Text(
                 modifier = modifier,
                 text = description,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
     }

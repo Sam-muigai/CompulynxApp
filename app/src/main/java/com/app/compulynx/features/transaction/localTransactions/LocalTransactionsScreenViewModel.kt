@@ -9,14 +9,16 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class LocalTransactionsScreenViewModel @Inject constructor(
-    private val transactionRepository: TransactionRepository
-) : ViewModel() {
-
-    val localTransactions = transactionRepository.getAllLocalTransactions()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-}
+class LocalTransactionsScreenViewModel
+    @Inject
+    constructor(
+        private val transactionRepository: TransactionRepository,
+    ) : ViewModel() {
+        val localTransactions =
+            transactionRepository.getAllLocalTransactions()
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5000),
+                    initialValue = emptyList(),
+                )
+    }

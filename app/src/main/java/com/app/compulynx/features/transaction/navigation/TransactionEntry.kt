@@ -4,8 +4,8 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.app.compulynx.features.transaction.localTransactions.LocalTransactionScreen
-import com.app.compulynx.features.transaction.transactionList.TransactionListScreen
 import com.app.compulynx.features.transaction.sendMoney.SendMoneyScreen
+import com.app.compulynx.features.transaction.transactionList.TransactionListScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,7 +22,7 @@ fun EntryProviderScope<NavKey>.transactionEntry(backStack: NavBackStack<NavKey>)
         TransactionListScreen(
             onBackClick = {
                 backStack.removeLastOrNull()
-            }
+            },
         )
     }
 
@@ -30,7 +30,7 @@ fun EntryProviderScope<NavKey>.transactionEntry(backStack: NavBackStack<NavKey>)
         SendMoneyScreen(
             onNavigateBack = {
                 backStack.removeLastOrNull()
-            }
+            },
         )
     }
 
@@ -38,7 +38,7 @@ fun EntryProviderScope<NavKey>.transactionEntry(backStack: NavBackStack<NavKey>)
         LocalTransactionScreen(
             onBackClick = {
                 backStack.removeLastOrNull()
-            }
+            },
         )
     }
 }

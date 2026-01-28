@@ -11,7 +11,6 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 class FakeTransactionRepository : TransactionRepository {
-
     private val localTransactionsList = mutableListOf<LocalTransaction>()
     private val _localTransactionsFlow = MutableStateFlow<List<LocalTransaction>>(emptyList())
     private val _syncingTransactionsFlow = MutableStateFlow<List<LocalTransaction>>(emptyList())
@@ -27,14 +26,15 @@ class FakeTransactionRepository : TransactionRepository {
 
     override suspend fun saveLocalTransaction(sendMoneyRequest: SendMoneyRequest) {
         // Map the request to a LocalTransaction object (mocking the mapping logic)
-        val newTransaction = LocalTransaction(
-            clientTransactionId = UUID.randomUUID(),
-            accountFrom = "mockAccount",
-            accountTo = sendMoneyRequest.accountTo,
-            createdAt = LocalDateTime.now(),
-            syncStatus = SyncStatus.QUEUED,
-            amount = sendMoneyRequest.amount.toDouble()
-        )
+        val newTransaction =
+            LocalTransaction(
+                clientTransactionId = UUID.randomUUID(),
+                accountFrom = "mockAccount",
+                accountTo = sendMoneyRequest.accountTo,
+                createdAt = LocalDateTime.now(),
+                syncStatus = SyncStatus.QUEUED,
+                amount = sendMoneyRequest.amount.toDouble(),
+            )
         localTransactionsList.add(newTransaction)
         _localTransactionsFlow.value = localTransactionsList.toList()
     }

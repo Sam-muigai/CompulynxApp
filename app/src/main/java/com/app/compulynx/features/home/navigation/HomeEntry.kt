@@ -34,7 +34,7 @@ fun EntryProviderScope<NavKey>.homeEntry(backStack: NavBackStack<NavKey>) {
             },
             onViewLocalTransactionsClick = {
                 backStack.add(LocalTransaction)
-            }
+            },
         )
     }
 }

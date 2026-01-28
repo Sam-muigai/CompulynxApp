@@ -9,28 +9,30 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "compulynx_preferences")
-
 
 interface CompulynxPreferences {
     suspend fun saveName(name: String)
+
     fun getName(): Flow<String>
+
     suspend fun saveEmail(email: String)
+
     fun getEmail(): Flow<String>
 
     suspend fun saveAccountNumber(accountNumber: String)
+
     fun getAccountNumber(): Flow<String>
 
     suspend fun saveCustomerId(customerId: String)
+
     fun getCustomerId(): Flow<String>
 
     suspend fun clearAll()
 }
 
-
 class CompulynxPreferencesImpl(
-    private val context: Context
+    private val context: Context,
 ) : CompulynxPreferences {
     override suspend fun saveName(name: String) {
         context.dataStore.edit { preferences ->
@@ -92,6 +94,4 @@ class CompulynxPreferencesImpl(
         val ACCOUNT_NUMBER = stringPreferencesKey("account_number")
         val CUSTOMER_ID = stringPreferencesKey("customer_id")
     }
-
-
 }

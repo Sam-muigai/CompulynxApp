@@ -37,7 +37,7 @@ fun LoginScreen(
     navigateToHome: () -> Unit,
     onForgotPassword: () -> Unit,
     onSignUp: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     val loginScreenState = loginScreenViewModel.state.collectAsStateWithLifecycle().value
 
@@ -52,10 +52,9 @@ fun LoginScreen(
         onEvent = loginScreenViewModel::handleEvent,
         onForgotPassword = onForgotPassword,
         onSignUp = onSignUp,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
     )
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,7 +64,7 @@ fun LoginScreenContent(
     onEvent: (LoginScreenEvent) -> Unit,
     onForgotPassword: () -> Unit,
     onSignUp: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -74,9 +73,10 @@ fun LoginScreenContent(
         },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp),
         ) {
             HeadlineText(text = "Log In")
             Spacer(Modifier.height(24.dp))
@@ -88,7 +88,7 @@ fun LoginScreenContent(
                 },
                 placeholder = "Enter your customer ID",
                 enabled = !loginScreenState.isLoading,
-                errorText = loginScreenState.customerIdError
+                errorText = loginScreenState.customerIdError,
             )
             Spacer(Modifier.height(24.dp))
             LynxPinTextField(
@@ -110,10 +110,11 @@ fun LoginScreenContent(
             Text(
                 modifier = Modifier.clickable(onClick = onForgotPassword),
                 text = "Forgot Password?",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                textDecoration = TextDecoration.Underline
+                style =
+                    MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                    ),
+                textDecoration = TextDecoration.Underline,
             )
             Spacer(Modifier.height(24.dp))
             LynxButton(
@@ -123,12 +124,12 @@ fun LoginScreenContent(
                 },
                 content = {
                     AnimatedContent(
-                        loginScreenState.isLoading
+                        loginScreenState.isLoading,
                     ) { loading ->
                         if (loading) {
                             CircularProgressIndicator(
                                 strokeWidth = 3.dp,
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(24.dp),
                             )
                         } else {
                             Text(
@@ -137,12 +138,12 @@ fun LoginScreenContent(
                         }
                     }
                 },
-                enabled = loginScreenState.isFormValid && !loginScreenState.isLoading
+                enabled = loginScreenState.isFormValid && !loginScreenState.isLoading,
             )
             Spacer(Modifier.height(24.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
                 Text(
                     text = "Don't have an account? ",
@@ -151,10 +152,11 @@ fun LoginScreenContent(
                 Text(
                     modifier = Modifier.clickable(onClick = onSignUp),
                     text = "Create one",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    textDecoration = TextDecoration.Underline
+                    style =
+                        MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                        ),
+                    textDecoration = TextDecoration.Underline,
                 )
             }
         }

@@ -1,6 +1,5 @@
 package com.app.compulynx.core.network.dtos
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,5 +12,5 @@ data class SendMoneyRequestDto(
     @SerialName("amount")
     val amount: Int?,
     @SerialName("customerId")
-    val customerId: String?
+    val customerId: String?,
 )

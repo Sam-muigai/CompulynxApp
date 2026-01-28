@@ -24,12 +24,10 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SendMoneyViewModelTest {
-
     private lateinit var viewModel: SendMoneyScreenViewModel
     private lateinit var fakeRepository: FakeTransactionRepository
     private lateinit var fakeSyncManager: FakeSyncManager
     private val testDispatcher = StandardTestDispatcher()
-
 
     @Before
     fun setUp() {
@@ -45,34 +43,32 @@ class SendMoneyViewModelTest {
     }
 
     @Test
-    fun `when form is valid and send money is clicked, transaction is saved and sync requested`() = runTest {
+    fun `when form is valid and send money is clicked, transaction is saved and sync requested`() =
+        runTest {
+            viewModel.handleEvent(SendMoneyScreenEvent.OnAmountChanged("1000"))
+            viewModel.handleEvent(SendMoneyScreenEvent.OnAccountToChanged("ACT1002"))
 
-        viewModel.handleEvent(SendMoneyScreenEvent.OnAmountChanged("1000"))
-        viewModel.handleEvent(SendMoneyScreenEvent.OnAccountToChanged("ACT1002"))
+            val effects = mutableListOf<SendMoneyScreenEffect>()
 
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.effect.collect { effects.add(it) }
+            }
 
-        val effects = mutableListOf<SendMoneyScreenEffect>()
+            viewModel.handleEvent(SendMoneyScreenEvent.OnSendMoneyClicked)
+            advanceUntilIdle()
 
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            viewModel.effect.collect { effects.add(it) }
+            // Verify Repository saved the data
+            val savedTransactions = fakeRepository.getAllLocalTransactions().first()
+
+            assertEquals(1, savedTransactions.size)
+            assertEquals("1000.0", savedTransactions[0].amount.toString())
+
+            // Verify SyncManager was triggered
+            assertTrue("Sync should be requested", fakeSyncManager.syncRequested)
+
+            // Verify Navigation Effect was sent
+            assertTrue(effects.any { it is SendMoneyScreenEffect.NavigateBack })
         }
-
-        viewModel.handleEvent(SendMoneyScreenEvent.OnSendMoneyClicked)
-        advanceUntilIdle()
-
-
-        // Verify Repository saved the data
-        val savedTransactions = fakeRepository.getAllLocalTransactions().first()
-
-        assertEquals(1, savedTransactions.size)
-        assertEquals("1000.0", savedTransactions[0].amount.toString())
-
-        // Verify SyncManager was triggered
-        assertTrue("Sync should be requested", fakeSyncManager.syncRequested)
-
-        // Verify Navigation Effect was sent
-        assertTrue(effects.any { it is SendMoneyScreenEffect.NavigateBack })
-    }
 
     @Test
     fun `when amount is changed, form validation updates correctly`() {

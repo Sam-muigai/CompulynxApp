@@ -12,18 +12,31 @@ class FakeAccountRepository : AccountRepository {
     private val _accountNumber = MutableStateFlow("")
     private var accountResult: Result<Account> = Result.success(Account())
 
-
     override suspend fun getAccountDetails(): Result<Account> = accountResult
+
     override fun getUsername(): Flow<String> = _username
+
     override fun getEmail(): Flow<String> = _email
+
     override fun getCustomerId(): Flow<String> = _customerId
+
     override fun getAccountNumber(): Flow<String> = _accountNumber
 
+    fun emitUsername(value: String) {
+        _username.value = value
+    }
 
-    fun emitUsername(value: String) { _username.value = value }
-    fun emitEmail(value: String) { _email.value = value }
-    fun emitCustomerId(value: String) { _customerId.value = value }
-    fun emitAccountNumber(value: String) { _accountNumber.value = value }
+    fun emitEmail(value: String) {
+        _email.value = value
+    }
+
+    fun emitCustomerId(value: String) {
+        _customerId.value = value
+    }
+
+    fun emitAccountNumber(value: String) {
+        _accountNumber.value = value
+    }
 
     fun setAccountResult(result: Result<Account>) {
         accountResult = result

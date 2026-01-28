@@ -7,9 +7,14 @@ import kotlinx.coroutines.flow.Flow
 
 interface TransactionRepository {
     suspend fun getLast100Transactions(): Result<List<Transaction>>
+
     suspend fun getMiniStatement(): Result<List<Transaction>>
+
     suspend fun saveLocalTransaction(sendMoneyRequest: SendMoneyRequest)
+
     suspend fun syncLocalTransactions()
+
     fun getSyncingTransactions(): Flow<List<LocalTransaction>>
+
     fun getAllLocalTransactions(): Flow<List<LocalTransaction>>
 }

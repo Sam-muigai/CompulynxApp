@@ -33,11 +33,11 @@ import com.app.compulynx.core.ui.components.LynxTextField
 @Composable
 fun SendMoneyScreen(
     sendMoneyScreenViewModel: SendMoneyScreenViewModel = hiltViewModel(),
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
 ) {
     val sendMoneyScreenState = sendMoneyScreenViewModel.state.collectAsStateWithLifecycle().value
     CollectOneTimeEvent(
-        sendMoneyScreenViewModel.effect
+        sendMoneyScreenViewModel.effect,
     ) { effect ->
         when (effect) {
             SendMoneyScreenEffect.NavigateBack -> onNavigateBack()
@@ -46,7 +46,7 @@ fun SendMoneyScreen(
     SendMoneyScreenContent(
         sendMoneyScreenState = sendMoneyScreenState,
         onEvent = sendMoneyScreenViewModel::handleEvent,
-        onBackClick = onNavigateBack
+        onBackClick = onNavigateBack,
     )
 }
 
@@ -56,7 +56,7 @@ fun SendMoneyScreenContent(
     modifier: Modifier = Modifier,
     sendMoneyScreenState: SendMoneyScreenState,
     onEvent: (SendMoneyScreenEvent) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -64,32 +64,35 @@ fun SendMoneyScreenContent(
             TopAppBar(
                 navigationIcon = {
                     IconButton(
-                        onClick = onBackClick
+                        onClick = onBackClick,
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
                         )
                     }
                 },
                 title = {
                     Text(
                         "Send Money",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Medium
-                        )
+                        style =
+                            MaterialTheme.typography.titleLarge.copy(
+                                fontWeight = FontWeight.Medium,
+                            ),
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                    ),
             )
         },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp),
         ) {
             LynxTextField(
                 label = "Account to",
@@ -99,7 +102,7 @@ fun SendMoneyScreenContent(
                 },
                 placeholder = "Enter the account number to send money to",
                 enabled = !sendMoneyScreenState.isLoading,
-                errorText = sendMoneyScreenState.accountToError
+                errorText = sendMoneyScreenState.accountToError,
             )
             Spacer(Modifier.height(24.dp))
             LynxTextField(
@@ -111,7 +114,7 @@ fun SendMoneyScreenContent(
                 placeholder = "Enter the amount to send",
                 enabled = !sendMoneyScreenState.isLoading,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                errorText = sendMoneyScreenState.amountError
+                errorText = sendMoneyScreenState.amountError,
             )
             Spacer(Modifier.height(24.dp))
             LynxButton(
@@ -121,12 +124,12 @@ fun SendMoneyScreenContent(
                 },
                 content = {
                     AnimatedContent(
-                        sendMoneyScreenState.isLoading
+                        sendMoneyScreenState.isLoading,
                     ) { loading ->
                         if (loading) {
                             CircularProgressIndicator(
                                 strokeWidth = 3.dp,
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(24.dp),
                             )
                         } else {
                             Text(
@@ -135,7 +138,7 @@ fun SendMoneyScreenContent(
                         }
                     }
                 },
-                enabled = sendMoneyScreenState.isFormValid && !sendMoneyScreenState.isLoading
+                enabled = sendMoneyScreenState.isFormValid && !sendMoneyScreenState.isLoading,
             )
         }
     }

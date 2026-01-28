@@ -20,102 +20,101 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 typealias ScreenModel = BaseViewModel<HomeScreenState, HomeScreenEvent, HomeScreenEffect>
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val accountRepository: AccountRepository,
-    private val transactionRepository: TransactionRepository,
-    private val syncManager: SyncManager
-) : ScreenModel(HomeScreenState()) {
-
-    init {
-        combine(
-            accountRepository.getUsername(),
-            syncManager.isSyncing,
-            transactionRepository.getSyncingTransactions()
-        ) { username, isSyncing, syncingTransactions ->
-            setState {
-                copy(
-                    isSyncing = isSyncing,
-                    username = username,
-                    syncingTransactionCount = syncingTransactions.size
-                )
-            }
-        }.launchIn(viewModelScope)
-    }
-
-
-    override fun handleEvent(event: HomeScreenEvent) {
-        when (event) {
-            HomeScreenEvent.OnViewBalanceClick -> {
-                fetchAccountDetails()
-            }
-
-            HomeScreenEvent.OnLogoutClick -> {
-                viewModelScope.launch {
-                    authRepository.logout()
-                    SnackbarController.sendEvent(SnackbarEvent("Logged out successfully"))
-                    sendEffect(HomeScreenEffect.NavigateToLogin)
-                }
-            }
-        }
-    }
-
-    fun getMiniStatement() {
-        setState { copy(isTransactionLoading = true) }
-        viewModelScope.launch {
-            transactionRepository.getMiniStatement()
-                .onSuccess { transactions ->
-                    setState {
-                        copy(
-                            isTransactionLoading = false,
-                            transactions = transactions
-                        )
-                    }
-                }.onFailure {
-                    setState { copy(isTransactionLoading = false) }
-                    SnackbarController.sendEvent(
-                        SnackbarEvent(
-                            it.message ?: "Error fetching transactions"
-                        )
+class HomeScreenViewModel
+    @Inject
+    constructor(
+        private val authRepository: AuthRepository,
+        private val accountRepository: AccountRepository,
+        private val transactionRepository: TransactionRepository,
+        private val syncManager: SyncManager,
+    ) : ScreenModel(HomeScreenState()) {
+        init {
+            combine(
+                accountRepository.getUsername(),
+                syncManager.isSyncing,
+                transactionRepository.getSyncingTransactions(),
+            ) { username, isSyncing, syncingTransactions ->
+                setState {
+                    copy(
+                        isSyncing = isSyncing,
+                        username = username,
+                        syncingTransactionCount = syncingTransactions.size,
                     )
                 }
+            }.launchIn(viewModelScope)
         }
-    }
 
-    private fun fetchAccountDetails() {
-        setState { copy(isBalanceLoading = true) }
-        viewModelScope.launch {
-            accountRepository.getAccountDetails()
-                .onSuccess { accountDetails ->
-                    setState {
-                        copy(
-                            isBalanceLoading = false,
-                            balance = accountDetails.balance.format(),
-                            isBalanceVisible = true
-                        )
-                    }
-                    // Hide the balance after 5 seconds
-                    delay(5_000L)
-                    setState {
-                        copy(
-                            isBalanceVisible = false
-                        )
+        override fun handleEvent(event: HomeScreenEvent) {
+            when (event) {
+                HomeScreenEvent.OnViewBalanceClick -> {
+                    fetchAccountDetails()
+                }
+
+                HomeScreenEvent.OnLogoutClick -> {
+                    viewModelScope.launch {
+                        authRepository.logout()
+                        SnackbarController.sendEvent(SnackbarEvent("Logged out successfully"))
+                        sendEffect(HomeScreenEffect.NavigateToLogin)
                     }
                 }
-                .onFailure {
-                    SnackbarController.sendEvent(
-                        SnackbarEvent(
-                            it.message ?: "Error fetching balance"
+            }
+        }
+
+        fun getMiniStatement() {
+            setState { copy(isTransactionLoading = true) }
+            viewModelScope.launch {
+                transactionRepository.getMiniStatement()
+                    .onSuccess { transactions ->
+                        setState {
+                            copy(
+                                isTransactionLoading = false,
+                                transactions = transactions,
+                            )
+                        }
+                    }.onFailure {
+                        setState { copy(isTransactionLoading = false) }
+                        SnackbarController.sendEvent(
+                            SnackbarEvent(
+                                it.message ?: "Error fetching transactions",
+                            ),
                         )
-                    )
-                }
+                    }
+            }
+        }
+
+        private fun fetchAccountDetails() {
+            setState { copy(isBalanceLoading = true) }
+            viewModelScope.launch {
+                accountRepository.getAccountDetails()
+                    .onSuccess { accountDetails ->
+                        setState {
+                            copy(
+                                isBalanceLoading = false,
+                                balance = accountDetails.balance.format(),
+                                isBalanceVisible = true,
+                            )
+                        }
+                        // Hide the balance after 5 seconds
+                        delay(5_000L)
+                        setState {
+                            copy(
+                                isBalanceVisible = false,
+                            )
+                        }
+                    }
+                    .onFailure {
+                        SnackbarController.sendEvent(
+                            SnackbarEvent(
+                                it.message ?: "Error fetching balance",
+                            ),
+                        )
+                    }
+            }
         }
     }
-}
 
 data class HomeScreenState(
     val username: String = "",
@@ -125,9 +124,8 @@ data class HomeScreenState(
     val transactions: List<Transaction> = emptyList(),
     val isBalanceVisible: Boolean = false,
     val balance: String = "",
-    val syncingTransactionCount: Int = 0
+    val syncingTransactionCount: Int = 0,
 ) : UiState
-
 
 sealed class HomeScreenEvent : UiEvent {
     data object OnViewBalanceClick : HomeScreenEvent()

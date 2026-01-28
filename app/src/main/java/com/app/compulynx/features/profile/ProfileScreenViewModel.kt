@@ -9,41 +9,39 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
-class ProfileScreenViewModel @Inject constructor(
-    private val accountRepository: AccountRepository
-) : ViewModel() {
+class ProfileScreenViewModel
+    @Inject
+    constructor(
+        private val accountRepository: AccountRepository,
+    ) : ViewModel() {
+        private val _profileScreenState = MutableStateFlow(ProfileScreenState())
+        val profileScreenState = _profileScreenState.asStateFlow()
 
-    private val _profileScreenState = MutableStateFlow(ProfileScreenState())
-    val profileScreenState = _profileScreenState.asStateFlow()
+        init {
+            obtainUserDetails()
+        }
 
-    init {
-        obtainUserDetails()
+        private fun obtainUserDetails() {
+            combine(
+                accountRepository.getAccountNumber(),
+                accountRepository.getEmail(),
+                accountRepository.getCustomerId(),
+                accountRepository.getUsername(),
+            ) { accountNumber, email, customerId, username ->
+                _profileScreenState.update {
+                    it.copy(
+                        name = username,
+                        email = email,
+                        customerId = customerId,
+                        accountNumber = accountNumber,
+                    )
+                }
+            }.launchIn(viewModelScope)
+        }
     }
-
-    private fun obtainUserDetails() {
-        combine(
-            accountRepository.getAccountNumber(),
-            accountRepository.getEmail(),
-            accountRepository.getCustomerId(),
-            accountRepository.getUsername()
-        ) { accountNumber, email, customerId, username ->
-            _profileScreenState.update {
-                it.copy(
-                    name = username,
-                    email = email,
-                    customerId = customerId,
-                    accountNumber = accountNumber
-                )
-            }
-        }.launchIn(viewModelScope)
-    }
-}
-
 
 data class ProfileScreenState(
     val name: String = "",

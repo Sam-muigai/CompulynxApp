@@ -17,10 +17,9 @@ data class LocalTransactionEntity(
     val amount: Double,
 )
 
-
 enum class SyncStatus {
     QUEUED,
     SYNCING,
     SYNCED,
-    FAILED
+    FAILED,
 }

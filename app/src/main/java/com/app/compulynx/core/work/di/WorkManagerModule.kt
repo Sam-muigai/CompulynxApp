@@ -13,14 +13,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object WorkManagerModule {
-
     @Provides
     @Singleton
     fun provideSyncManager(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): SyncManager {
         return SyncManagerImpl(context)
     }
-
-
 }

@@ -4,7 +4,6 @@ import com.app.compulynx.domain.models.LoginRequest
 import com.app.compulynx.domain.repositories.AuthRepository
 
 class FakeAuthRepository : AuthRepository {
-
     private var shouldReturnError = false
     private var errorMessage = "Invalid credentials"
     private var successMessage = "Login Successful"
@@ -24,8 +23,10 @@ class FakeAuthRepository : AuthRepository {
         logoutCalled = true
     }
 
-
-    fun setShouldReturnError(value: Boolean, message: String = "Invalid credentials") {
+    fun setShouldReturnError(
+        value: Boolean,
+        message: String = "Invalid credentials",
+    ) {
         shouldReturnError = value
         errorMessage = message
     }

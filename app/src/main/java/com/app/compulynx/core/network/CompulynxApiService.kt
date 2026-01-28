@@ -15,9 +15,13 @@ import io.ktor.client.HttpClient
 
 interface CompulynxApiService {
     suspend fun loginUser(loginRequestDto: LoginRequestDto): NetworkResult<LoginResponseDto>
+
     suspend fun getAccountBalance(accountRequestDto: AccountRequestDto): NetworkResult<AccountDto>
+
     suspend fun getLast100Transactions(transactionRequestDto: TransactionRequestDto): NetworkResult<List<TransactionDto>>
+
     suspend fun sendMoney(sendMoneyRequestDto: SendMoneyRequestDto): NetworkResult<SendMoneyResponseDto>
+
     suspend fun getMiniStatement(miniStatementRequestDto: MiniStatementRequestDto): NetworkResult<List<TransactionDto>>
 }
 
@@ -41,7 +45,6 @@ class CompulynxApiServiceImpl(private val client: HttpClient) : CompulynxApiServ
     override suspend fun getMiniStatement(miniStatementRequestDto: MiniStatementRequestDto): NetworkResult<List<TransactionDto>> {
         return client.postRequest(miniStatementRequestDto, GET_MINI_STATEMENT)
     }
-
 
     companion object {
         const val BASE_URL = "http://192.168.100.72:8092/springboot-rest-api"

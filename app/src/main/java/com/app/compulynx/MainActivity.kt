@@ -24,7 +24,6 @@ import androidx.navigation3.ui.NavDisplay
 import com.app.compulynx.core.base.CollectOneTimeEvent
 import com.app.compulynx.core.base.SnackbarController
 import com.app.compulynx.core.ui.theme.CompuLynxTheme
-import com.app.compulynx.features.authentication.login.LoginScreen
 import com.app.compulynx.features.authentication.navigation.Login
 import com.app.compulynx.features.authentication.navigation.authenticationEntry
 import com.app.compulynx.features.home.navigation.homeEntry
@@ -53,15 +52,16 @@ fun App() {
     val scope = rememberCoroutineScope()
     CollectOneTimeEvent(
         flow = SnackbarController.events,
-        snackbarHostState
+        snackbarHostState,
     ) { event ->
         scope.launch {
             snackbarHostState.currentSnackbarData?.dismiss()
-            val result = snackbarHostState.showSnackbar(
-                message = event.message,
-                actionLabel = event.action?.name,
-                duration = SnackbarDuration.Short
-            )
+            val result =
+                snackbarHostState.showSnackbar(
+                    message = event.message,
+                    actionLabel = event.action?.name,
+                    duration = SnackbarDuration.Short,
+                )
 
             if (result == SnackbarResult.ActionPerformed) {
                 event.action?.action?.invoke()
@@ -71,23 +71,25 @@ fun App() {
     Scaffold(
         snackbarHost = {
             SnackbarHost(
-                hostState = snackbarHostState
+                hostState = snackbarHostState,
             )
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) { _ ->
         NavDisplay(
             backStack = backStack,
-            entryProvider = entryProvider {
-                authenticationEntry(backStack)
-                homeEntry(backStack)
-                transactionEntry(backStack)
-                profileEntry(backStack)
-            },
-            entryDecorators = listOf(
-                rememberSaveableStateHolderNavEntryDecorator(),
-                rememberViewModelStoreNavEntryDecorator()
-            )
+            entryProvider =
+                entryProvider {
+                    authenticationEntry(backStack)
+                    homeEntry(backStack)
+                    transactionEntry(backStack)
+                    profileEntry(backStack)
+                },
+            entryDecorators =
+                listOf(
+                    rememberSaveableStateHolderNavEntryDecorator(),
+                    rememberViewModelStoreNavEntryDecorator(),
+                ),
         )
     }
 }

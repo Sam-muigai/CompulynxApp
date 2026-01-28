@@ -13,11 +13,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
-
     @Provides
     @Singleton
     fun provideCompulynxDataStore(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): CompulynxPreferences {
         return CompulynxPreferencesImpl(context)
     }

@@ -12,31 +12,34 @@ import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-val JSON = Json {
-    ignoreUnknownKeys = true
-    encodeDefaults = true
-    coerceInputValues = true
-    prettyPrint = true
-    isLenient = true
-}
-
-fun getKtorClient(): HttpClient = HttpClient(Android) {
-    install(ContentNegotiation) {
-        json(
-            json = JSON
-        )
+val JSON =
+    Json {
+        ignoreUnknownKeys = true
+        encodeDefaults = true
+        coerceInputValues = true
+        prettyPrint = true
+        isLenient = true
     }
 
-    install(Logging) {
-        level = LogLevel.BODY
-        logger = object : Logger {
-            override fun log(message: String) {
-                println(message)
-            }
+fun getKtorClient(): HttpClient =
+    HttpClient(Android) {
+        install(ContentNegotiation) {
+            json(
+                json = JSON,
+            )
+        }
+
+        install(Logging) {
+            level = LogLevel.BODY
+            logger =
+                object : Logger {
+                    override fun log(message: String) {
+                        println(message)
+                    }
+                }
+        }
+
+        install(DefaultRequest) {
+            header(HttpHeaders.ContentType, "application/json")
         }
     }
-
-    install(DefaultRequest) {
-        header(HttpHeaders.ContentType, "application/json")
-    }
-}

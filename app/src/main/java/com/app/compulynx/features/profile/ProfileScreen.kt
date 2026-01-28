@@ -1,6 +1,5 @@
 package com.app.compulynx.features.profile
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -24,23 +23,22 @@ import com.app.compulynx.features.profile.components.InformationCard
 @Composable
 fun ProfileScreen(
     profileScreenViewModel: ProfileScreenViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     val profileScreenState =
         profileScreenViewModel.profileScreenState.collectAsStateWithLifecycle().value
     ProfileScreenContent(
         onBackClick = onBackClick,
-        profileScreenState = profileScreenState
+        profileScreenState = profileScreenState,
     )
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreenContent(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
-    profileScreenState: ProfileScreenState
+    profileScreenState: ProfileScreenState,
 ) {
     Scaffold(
         modifier = modifier,
@@ -48,48 +46,51 @@ fun ProfileScreenContent(
             TopAppBar(
                 navigationIcon = {
                     IconButton(
-                        onClick = onBackClick
+                        onClick = onBackClick,
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
                         )
                     }
                 },
                 title = {
                     Text(
                         "Profile",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Medium
-                        )
+                        style =
+                            MaterialTheme.typography.titleLarge.copy(
+                                fontWeight = FontWeight.Medium,
+                            ),
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                    ),
             )
         },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp),
         ) {
             InformationCard(
                 label = "Name",
-                value = profileScreenState.name
+                value = profileScreenState.name,
             )
             InformationCard(
                 label = "Email",
-                value = profileScreenState.email
+                value = profileScreenState.email,
             )
             InformationCard(
                 label = "Customer ID",
-                value = profileScreenState.customerId
+                value = profileScreenState.customerId,
             )
             InformationCard(
                 label = "Account Number",
-                value = profileScreenState.accountNumber
+                value = profileScreenState.accountNumber,
             )
         }
     }

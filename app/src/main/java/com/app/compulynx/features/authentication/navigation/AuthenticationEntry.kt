@@ -10,7 +10,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object Login : NavKey
 
-
 fun EntryProviderScope<NavKey>.authenticationEntry(backStack: NavBackStack<NavKey>) {
     entry<Login> {
         LoginScreen(
@@ -21,14 +20,12 @@ fun EntryProviderScope<NavKey>.authenticationEntry(backStack: NavBackStack<NavKe
                 }
             },
             onSignUp = {
-
             },
             onBackClick = {
                 backStack.removeLastOrNull()
             },
             onForgotPassword = {
-
-            }
+            },
         )
     }
 }

@@ -29,31 +29,34 @@ import com.app.compulynx.utils.format
 @Composable
 fun LocalTransactionCard(
     modifier: Modifier = Modifier,
-    localTransaction: LocalTransaction
+    localTransaction: LocalTransaction,
 ) {
-    val (syncColor, syncStatus) = when (localTransaction.syncStatus) {
-        SyncStatus.QUEUED -> Pair(Color.Blue, "Queued")
-        SyncStatus.SYNCING -> Pair(Color.Yellow, "In Progress")
-        SyncStatus.SYNCED -> Pair(Color.Green, "Success")
-        SyncStatus.FAILED -> Pair(Color.Red, "Failed")
-    }
+    val (syncColor, syncStatus) =
+        when (localTransaction.syncStatus) {
+            SyncStatus.QUEUED -> Pair(Color.Blue, "Queued")
+            SyncStatus.SYNCING -> Pair(Color.Yellow, "In Progress")
+            SyncStatus.SYNCED -> Pair(Color.Green, "Success")
+            SyncStatus.FAILED -> Pair(Color.Red, "Failed")
+        }
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
         shape = MaterialTheme.shapes.medium,
-        color = MaterialTheme.colorScheme.surface
+        color = MaterialTheme.colorScheme.surface,
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Surface(
                 modifier = Modifier,
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.surface
+                color = MaterialTheme.colorScheme.surface,
             ) {
                 Box(
                     modifier = Modifier.padding(12.dp),
@@ -68,25 +71,28 @@ fun LocalTransactionCard(
             Column {
                 Text(
                     text = "Sent to: ${localTransaction.accountTo}",
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.Medium
-                    )
+                    style =
+                        MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.Medium,
+                        ),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = syncStatus,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.Medium,
-                        color = syncColor
-                    )
+                    style =
+                        MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Medium,
+                            color = syncColor,
+                        ),
                 )
             }
             Spacer(Modifier.weight(1f))
             Text(
                 "Ksh ${localTransaction.amount.format()}",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = Color.Red,
-                )
+                style =
+                    MaterialTheme.typography.bodyMedium.copy(
+                        color = Color.Red,
+                    ),
             )
             Spacer(Modifier.width(8.dp))
         }

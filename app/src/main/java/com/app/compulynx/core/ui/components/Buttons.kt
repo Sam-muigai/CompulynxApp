@@ -24,7 +24,7 @@ fun LynxButton(
         enabled = enabled,
         shape = shape,
         content = content,
-        colors = colors
+        colors = colors,
     )
 }
 
@@ -34,13 +34,13 @@ fun LynxOutlineButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     shape: Shape = ButtonDefaults.shape,
-    content: @Composable (RowScope.() -> Unit)
+    content: @Composable (RowScope.() -> Unit),
 ) {
     OutlinedButton(
         modifier = modifier,
         onClick = onClick,
         enabled = enabled,
         shape = shape,
-        content = content
+        content = content,
     )
 }

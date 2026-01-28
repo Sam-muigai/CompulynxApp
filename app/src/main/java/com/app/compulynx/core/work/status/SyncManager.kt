@@ -12,17 +12,19 @@ import kotlinx.coroutines.flow.map
 
 interface SyncManager {
     val isSyncing: Flow<Boolean>
+
     fun requestSync()
 }
 
 class SyncManagerImpl(
-    private val context: Context
+    private val context: Context,
 ) : SyncManager {
     override val isSyncing: Flow<Boolean>
-        get() = WorkManager.getInstance(context)
-            .getWorkInfosForUniqueWorkFlow(SYNC_LOCAL_TRANSACTION_WORK_NAME)
-            .map(List<WorkInfo>::anyRunning)
-            .conflate()
+        get() =
+            WorkManager.getInstance(context)
+                .getWorkInfosForUniqueWorkFlow(SYNC_LOCAL_TRANSACTION_WORK_NAME)
+                .map(List<WorkInfo>::anyRunning)
+                .conflate()
 
     override fun requestSync() {
         val workManager = WorkManager.getInstance(context)

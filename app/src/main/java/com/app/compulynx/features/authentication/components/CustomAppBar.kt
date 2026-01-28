@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 fun CustomAppBar(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-    title: @Composable (() -> Unit) = {}
+    title: @Composable (() -> Unit) = {},
 ) {
     TopAppBar(
         modifier = modifier,
@@ -24,13 +24,14 @@ fun CustomAppBar(
             IconButton(onClick = onBackClick) {
                 Icon(
                     imageVector = Icons.Default.Clear,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
         },
         title = title,
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background
-        )
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background,
+            ),
     )
 }

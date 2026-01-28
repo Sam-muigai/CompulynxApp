@@ -1,6 +1,5 @@
 package com.app.compulynx.core.network.dtos
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,5 +12,5 @@ data class LoginResponseDto(
     @SerialName("customerName")
     val customerName: String?,
     @SerialName("email")
-    val email: String?
+    val email: String?,
 )

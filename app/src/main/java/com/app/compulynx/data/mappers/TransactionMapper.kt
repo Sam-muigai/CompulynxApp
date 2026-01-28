@@ -20,7 +20,6 @@ fun TransactionDto.toDomain(): Transaction {
     )
 }
 
-
 fun SendMoneyResponseDto.toDomain(): SendMoneyResponse {
     return SendMoneyResponse(
         message = responseMessage ?: "",
@@ -35,6 +34,6 @@ fun LocalTransactionEntity.toDomain(): LocalTransaction {
         accountTo = accountTo,
         createdAt = createdAt,
         syncStatus = syncStatus,
-        amount = amount
+        amount = amount,
     )
 }

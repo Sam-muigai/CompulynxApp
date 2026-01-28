@@ -33,5 +33,4 @@ object Validator {
             else -> null
         }
     }
-
 }
