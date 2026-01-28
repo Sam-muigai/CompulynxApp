@@ -28,7 +28,7 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideLocalTransactionDao(database: CompulynxDatabase): LocalTransactionDao  {
+    fun provideLocalTransactionDao(database: CompulynxDatabase): LocalTransactionDao {
         return database.localTransactionDao()
     }
 }
